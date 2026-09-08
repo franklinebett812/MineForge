@@ -1,3 +1,64 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { firebaseConfig, isFirebaseConfigured } from "./firebase-config.js";
+
+const loginLink=document.querySelector("#loginLink");
+const accountMenu=document.querySelector("#accountMenu");
+const accountTrigger=document.querySelector("#accountTrigger");
+const accountDropdown=document.querySelector("#accountDropdown");
+const accountAvatar=document.querySelector("#accountAvatar");
+const accountLabel=document.querySelector("#accountLabel");
+const accountName=document.querySelector("#accountName");
+const accountEmail=document.querySelector("#accountEmail");
+
+function closeAccountMenu(){
+ accountDropdown.hidden=true;
+ accountTrigger.setAttribute("aria-expanded","false");
+}
+
+function updateAccountMenu(user){
+ if(!user){
+  loginLink.hidden=false;
+  accountMenu.hidden=true;
+  closeAccountMenu();
+  return;
+ }
+ const displayName=user.displayName||user.email?.split("@")[0]||"Account";
+ const initial=displayName.trim().charAt(0).toUpperCase()||"A";
+ loginLink.hidden=true;
+ accountMenu.hidden=false;
+ accountAvatar.textContent=initial;
+ accountLabel.textContent=displayName;
+ accountName.textContent=displayName;
+ accountEmail.textContent=user.email||user.phoneNumber||"Signed-in account";
+}
+
+accountTrigger.onclick=()=>{
+ const isOpen=!accountDropdown.hidden;
+ accountDropdown.hidden=isOpen;
+ accountTrigger.setAttribute("aria-expanded",String(!isOpen));
+};
+document.addEventListener("click",event=>{
+ if(!accountMenu.contains(event.target)) closeAccountMenu();
+});
+document.querySelector("#logoutButton").onclick=async()=>{
+ if(!isFirebaseConfigured) return;
+ try{
+  await signOut(getAuth());
+  window.location.replace("index.html");
+ }catch(error){
+  console.error("Unable to sign out",error);
+ }
+};
+
+if(isFirebaseConfigured){
+ const app=initializeApp(firebaseConfig);
+ const auth=getAuth(app);
+ onAuthStateChanged(auth,updateAccountMenu);
+}else{
+ updateAccountMenu(null);
+}
+
 const products=[
 {name:"Antminer S19 Pro",type:"asic",tag:"ASIC",spec:"110 TH/s · ~29.5 J/TH",price:"$2,850",note:"Limited allocation"},
 {name:"WhatsMiner M30S++",type:"asic",tag:"ASIC",spec:"112 TH/s · ~31 J/TH",price:"$2,650",note:"Batch closing soon"},

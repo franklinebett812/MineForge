@@ -10,7 +10,8 @@ import {
 	setPersistence,
 	signInWithEmailAndPassword,
 	signInWithPhoneNumber,
-	signInWithPopup
+	signInWithPopup,
+	onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { firebaseConfig, isFirebaseConfigured } from "./firebase-config.js";
 
@@ -18,6 +19,12 @@ const $ = selector => document.querySelector(selector);
 const status = $("#authStatus");
 let confirmationResult;
 let recaptchaVerifier;
+let signUpMode = false;
+
+const requestedRedirect = new URLSearchParams(window.location.search).get("redirect");
+const redirectTarget = requestedRedirect && requestedRedirect.startsWith("/") && !requestedRedirect.startsWith("//")
+	? requestedRedirect
+	: "index.html";
 
 function showStatus(message, type = "") {
 	status.textContent = message;
@@ -33,26 +40,35 @@ function firebaseError(error) {
 		"auth/popup-closed-by-user": "The Google sign-in window was closed.",
 		"auth/too-many-requests": "Too many attempts. Try again later.",
 		"auth/invalid-verification-code": "That SMS code is invalid.",
-		"auth/code-expired": "That SMS code has expired. Request a new one."
+		"auth/code-expired": "That SMS code has expired. Request a new one.",
+		"auth/operation-not-allowed": "Enable this sign-in provider in Firebase Console.",
+		"auth/password-does-not-meet-requirements": "Choose a stronger password."
 	};
 	return messages[error.code] || "Authentication failed. Check your details and try again.";
 }
 
 function redirectAfterSignIn(user) {
 	showStatus(`Signed in as ${user.email || user.phoneNumber}.`, "success");
-	setTimeout(() => { window.location.href = "index.html"; }, 700);
+	setTimeout(() => { window.location.replace(redirectTarget); }, 700);
 }
 
 if (isFirebaseConfigured) {
 	const app = initializeApp(firebaseConfig);
 	const auth = getAuth(app);
+	onAuthStateChanged(auth, user => {
+		if (user) window.location.replace(redirectTarget);
+	});
 
 	$("#emailForm").addEventListener("submit", async event => {
 		event.preventDefault();
 		try {
 			const persistence = $("#remember").checked ? browserLocalPersistence : browserSessionPersistence;
 			await setPersistence(auth, persistence);
-			const credential = await signInWithEmailAndPassword(auth, $("#email").value.trim(), $("#password").value);
+			const email = $("#email").value.trim();
+			const password = $("#password").value;
+			const credential = signUpMode
+				? await createUserWithEmailAndPassword(auth, email, password)
+				: await signInWithEmailAndPassword(auth, email, password);
 			redirectAfterSignIn(credential.user);
 		} catch (error) {
 			showStatus(firebaseError(error), "error");
@@ -86,12 +102,16 @@ if (isFirebaseConfigured) {
 
 	$("#signup").addEventListener("click", async event => {
 		event.preventDefault();
-		try {
-			const credential = await createUserWithEmailAndPassword(auth, $("#email").value.trim(), $("#password").value);
-			redirectAfterSignIn(credential.user);
-		} catch (error) {
-			showStatus(firebaseError(error), "error");
-		}
+		signUpMode = !signUpMode;
+		$("#authTitle").textContent = signUpMode ? "Create your account" : "Welcome back";
+		$("#authSubtitle").textContent = signUpMode
+			? "Create an account to manage your hardware orders."
+			: "Sign in to manage your hardware orders and account.";
+		$("#emailSubmit").textContent = signUpMode ? "Create account" : "Sign in";
+		$("#signupPrompt").textContent = signUpMode ? "Already have an account?" : "Don't have an account?";
+		$("#signup").textContent = signUpMode ? "Sign in" : "Create one";
+		showStatus("");
+		$("#email").focus();
 	});
 
 	$("#phoneForm").addEventListener("submit", async event => {

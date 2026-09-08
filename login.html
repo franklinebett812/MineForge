@@ -20,8 +20,8 @@
         <div class="btc">₿</div>
       </div>
       <div class="eyebrow">SECURE ACCOUNT</div>
-      <h1>Welcome back</h1>
-      <p class="sub">Sign in to manage your hardware orders and account.</p>
+      <h1 id="authTitle">Welcome back</h1>
+      <p class="sub" id="authSubtitle">Sign in to manage your hardware orders and account.</p>
 
       <button class="google" id="googleBtn">
         <span class="google-icon">G</span>
@@ -45,7 +45,7 @@
           <a href="#" id="forgot">Forgot password?</a>
         </div>
 
-        <button class="primary" type="submit">Sign in</button>
+        <button class="primary" id="emailSubmit" type="submit">Sign in</button>
       </form>
 
       <div class="divider"><span>or</span></div>
@@ -72,7 +72,7 @@
       </form>
 
       <p class="status" id="authStatus" role="status" aria-live="polite"></p>
-      <p class="signup">Don't have an account? <a href="#" id="signup">Create one</a></p>
+      <p class="signup"><span id="signupPrompt">Don't have an account?</span> <a href="#" id="signup">Create one</a></p>
       <p class="fine">Authentication is handled securely by Firebase.</p>
     </section>
   </main>

@@ -18,7 +18,23 @@
       <a href="#delivery">Delivery</a>
       <a href="#faq">FAQ</a>
     </nav>
-    <a class="btn btn-small" href="#products">View rigs</a>
+    <a class="btn btn-small" id="loginLink" href="login.html?redirect=/index.html">Sign in</a>
+    <div class="account-menu" id="accountMenu" hidden>
+      <button class="account-trigger" id="accountTrigger" type="button" aria-expanded="false" aria-controls="accountDropdown">
+        <span class="account-avatar" id="accountAvatar">?</span>
+        <span class="account-label" id="accountLabel">Account</span>
+        <span aria-hidden="true">▾</span>
+      </button>
+      <div class="account-dropdown" id="accountDropdown" hidden>
+        <div class="account-summary">
+          <strong id="accountName">Account</strong>
+          <span id="accountEmail"></span>
+        </div>
+        <a href="#profile" id="profileLink">Profile</a>
+        <a href="#orders">My orders</a>
+        <button type="button" id="logoutButton">Sign out</button>
+      </div>
+    </div>
     <button class="menu" id="menuBtn" aria-label="Menu">☰</button>
   </div>
 </header>
@@ -132,6 +148,6 @@
     <p class="fine">Demo form only — connect this to your own backend/payment provider before production use.</p>
   </div>
 </div>
-<script src="script.js"></script>
+<script type="module" src="script.js"></script>
 </body>
 </html>
