@@ -7,7 +7,7 @@ const status = document.querySelector("#paymentStatus");
 const summary = document.querySelector("#orderSummary");
 const paymentButton = document.querySelector("#paymentButton");
 const orderId = new URLSearchParams(window.location.search).get("orderId");
-const paymentBackendUrl = window.PAYMENT_BACKEND_URL || "http://localhost:5000";
+const paymentBackendUrl = window.PAYMENT_BACKEND_URL || "https://mineforge.pythonanywhere.com/api";
 
 function showError(message) {
   status.textContent = message;
@@ -68,7 +68,7 @@ if (!isFirebaseConfigured || !orderId) {
         paymentButton.disabled = true;
         paymentButton.textContent = "Creating secure payment...";
         try {
-          const response = await fetch(`${paymentBackendUrl}/api/create-payment`, {
+          const response = await fetch(`${paymentBackendUrl}/create-payment`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

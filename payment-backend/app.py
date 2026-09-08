@@ -3,7 +3,7 @@ import re
 import hmac
 import hashlib
 from decimal import Decimal, InvalidOperation
-from functools import wraps
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 import json
 

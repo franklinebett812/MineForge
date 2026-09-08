@@ -34,6 +34,6 @@ https://YOUR_BACKEND_HOST/api/nowpayments-ipn
 
 The backend verifies `x-nowpayments-sig` and logs the payment status. It does not update Firebase. The callback must be publicly reachable over HTTPS in production.
 
-For production, set `window.PAYMENT_BACKEND_URL` to the deployed API URL before loading `payment.js`, or replace the local default in that module.
+The frontend is configured to call `https://mineforge.pythonanywhere.com/api/create-payment`; the API returns the NOWPayments `invoice_url`, and the browser redirects the customer to that hosted payment page.
 
 Never commit `.env` or NOWPayments credentials.
