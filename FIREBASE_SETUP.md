@@ -13,8 +13,9 @@ To make authentication real:
    - Google
    - Phone
 3. Add your web app and copy its Firebase configuration.
-4. Add Firebase's Web SDK to `login.html`.
-5. Replace the demo handlers in `login.js` with Firebase Auth calls.
+4. Copy the Firebase web app configuration into `firebase-config.js`.
+5. Serve the project from `http://localhost` (for example with VS Code Live Server). Firebase modules do not reliably load from `file://` pages.
+6. Add `localhost` and your production domain under Authentication → Settings → Authorized domains.
 
 Recommended Firebase functions:
 - signInWithEmailAndPassword()
@@ -22,5 +23,7 @@ Recommended Firebase functions:
 - signInWithPhoneNumber() + RecaptchaVerifier
 - sendPasswordResetEmail()
 - createUserWithEmailAndPassword()
+
+The browser config is intentionally public. Never add service-account credentials or private server keys to `firebase-config.js`.
 
 Never place private server credentials or service-account keys in the browser.
