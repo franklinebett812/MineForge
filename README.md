@@ -18,6 +18,10 @@ The order form is intentionally a demo. Before accepting real orders or payments
 
 No proprietary source code, logos, images or payment credentials from the referenced site are included.
 
+## Payments
+
+The payment review page calls the Flask service in `payment-backend/` to create a NOWPayments invoice. Configure the backend using `payment-backend/.env.example`; never put NOWPayments credentials in frontend JavaScript.
+
 
 ## Login page
 Open `login.html` for the new Bitcoin-themed login page. It includes email, Google and phone-number UI and is ready to be connected to Firebase Authentication. `FIREBASE_SETUP.md` contains the setup checklist.
