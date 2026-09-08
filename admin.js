@@ -60,7 +60,7 @@ function renderOrders(orders) {
   const entries = Object.values(orders || {}).sort((left, right) => (right.createdAt || 0) - (left.createdAt || 0));
   $("#orderCount").textContent = `${entries.length} order${entries.length === 1 ? "" : "s"}`;
   orderRows.innerHTML = entries.length ? entries.map(order => `
-    <tr><td><strong>${escapeHtml(order.customerName || "Unknown")}</strong><small>${escapeHtml(order.email || "")}</small></td><td>${escapeHtml(order.productName || "—")}</td><td>${escapeHtml(order.price || "—")}</td><td><span class="badge">${escapeHtml(order.status || "pending")}</span></td><td>${formatDate(order.createdAt)}</td></tr>`).join("") : '<tr><td colspan="5" class="empty">No orders yet.</td></tr>';
+    <tr><td><strong>${escapeHtml(order.customerName || "Unknown")}</strong><small>${escapeHtml(order.email || "")}</small></td><td>${escapeHtml(order.phone || "—")}</td><td>${escapeHtml(order.physicalAddress || "—")}</td><td>${escapeHtml(order.productName || "—")}</td><td>${escapeHtml(order.price || "—")}</td><td><span class="badge">${escapeHtml(order.status || "pending")}</span></td><td>${formatDate(order.createdAt)}</td></tr>`).join("") : '<tr><td colspan="7" class="empty">No orders yet.</td></tr>';
 }
 
 function renderUsers(users) {

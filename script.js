@@ -150,6 +150,7 @@ document.querySelector("#orderForm").onsubmit=async e=>{
    email:auth.currentUser.email||formData.get("email"),
    customerName:String(formData.get("name")).trim(),
    phone:String(formData.get("phone")||"").trim(),
+  physicalAddress:String(formData.get("physicalAddress")).trim(),
    productName:selectedProduct.name,
    productType:selectedProduct.type,
    productSpec:selectedProduct.spec,

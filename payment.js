@@ -35,6 +35,7 @@ if (!isFirebaseConfigured || !orderId) {
       document.querySelector("#orderProduct").textContent = order.productName || "Product";
       document.querySelector("#orderSpec").textContent = order.productSpec || "—";
       document.querySelector("#orderCustomer").textContent = order.email || order.customerName || "—";
+      document.querySelector("#orderAddress").textContent = order.physicalAddress || "—";
       document.querySelector("#orderPrice").textContent = order.price || "—";
       status.textContent = "Order saved. Review the details before payment.";
       summary.hidden = false;
