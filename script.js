@@ -99,6 +99,7 @@ function render(filter="all"){
    <h3>${p.name}</h3>
    <div class="spec">${p.spec}</div>
    <div class="product-price">${p.price}</div>
+  <div class="payment-label">${p.paymentType === "partial" ? `Partial payment${p.minimumPayment ? ` from ${p.minimumPayment}` : ""}` : "Full payment"}</div>
    <div class="warning">⚠ ${p.note}</div>
    <button class="btn full reserve" data-index="${products.indexOf(p)}">Secure this rig</button>
  </article>`).join("");
@@ -130,7 +131,33 @@ document.querySelectorAll(".filter").forEach(btn=>btn.onclick=()=>{
 
 const modal=document.querySelector("#orderModal");
 let selectedProduct=null;
-function openModal(p){selectedProduct=p;document.querySelector("#modalTitle").textContent=p.name;document.querySelector("#modalPrice").textContent=`Listed price: ${p.price}`;modal.classList.add("show")}
+function openModal(p){
+ selectedProduct=p;
+ const isPartial=p.paymentType==="partial";
+ document.querySelector("#modalTitle").textContent=p.name;
+ document.querySelector("#modalPrice").textContent=`Full price: ${p.price}`;
+ document.querySelector("#paymentTypeLabel").textContent=`Default option: ${isPartial?"partial payment":"full payment"}. You can choose either option below.`;
+ document.querySelector("#fullPayment").checked=!isPartial;
+ document.querySelector("#partialPayment").checked=isPartial;
+ document.querySelector("#fullPayment").onchange=()=>selectPaymentType("full",p);
+ document.querySelector("#partialPayment").onchange=()=>selectPaymentType("partial",p);
+ togglePartialAmount(p);
+ modal.classList.add("show")
+}
+function parseMoney(value){const amount=Number(String(value||"").replace(/[^0-9.]/g,""));return Number.isFinite(amount)?amount:0}
+function getPaymentType(){return document.querySelector("#partialPayment").checked?"partial":"full"}
+function selectPaymentType(type,p){
+ document.querySelector("#fullPayment").checked=type==="full";
+ document.querySelector("#partialPayment").checked=type==="partial";
+ togglePartialAmount(p);
+}
+function togglePartialAmount(p){
+ const isPartial=getPaymentType()==="partial";
+ document.querySelector("#partialAmountField").hidden=!isPartial;
+ document.querySelector("#paymentAmount").required=isPartial;
+ document.querySelector("#paymentAmount").min=String(parseMoney(p.minimumPayment)||1);
+ document.querySelector("#paymentAmount").max=String(parseMoney(p.price)||0);
+}
 document.querySelector("#closeModal").onclick=()=>modal.classList.remove("show");
 modal.onclick=e=>{if(e.target===modal)modal.classList.remove("show")};
 document.querySelector("#orderForm").onsubmit=async e=>{
@@ -145,6 +172,11 @@ document.querySelector("#orderForm").onsubmit=async e=>{
  try{
   const orderRef=push(ref(database,"orders"));
   const formData=new FormData(e.target);
+    const fullAmount=parseMoney(selectedProduct.price);
+    const paymentType=getPaymentType();
+    const paymentAmount=paymentType==="partial"?Number(formData.get("paymentAmount")):fullAmount;
+    const minimumAmount=parseMoney(selectedProduct.minimumPayment)||1;
+    if(!Number.isFinite(paymentAmount)||paymentType==="partial"&&(paymentAmount<minimumAmount||paymentAmount>fullAmount)){alert(`Enter an amount between ${minimumAmount} and ${fullAmount}.`);submitButton.disabled=false;return;}
   await set(orderRef,{
    uid:auth.currentUser.uid,
    email:auth.currentUser.email||formData.get("email"),
@@ -154,7 +186,9 @@ document.querySelector("#orderForm").onsubmit=async e=>{
    productName:selectedProduct.name,
    productType:selectedProduct.type,
    productSpec:selectedProduct.spec,
-   price:selectedProduct.price,
+  price:`$${paymentAmount.toFixed(2)}`,
+  fullPrice:selectedProduct.price,
+  paymentType,
    status:"pending_payment",
    createdAt:serverTimestamp()
   });

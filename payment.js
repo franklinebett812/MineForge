@@ -60,6 +60,7 @@ if (!isFirebaseConfigured || !orderId) {
       document.querySelector("#orderSpec").textContent = order.productSpec || "—";
       document.querySelector("#orderCustomer").textContent = order.email || order.customerName || "—";
       document.querySelector("#orderAddress").textContent = order.physicalAddress || "—";
+      document.querySelector("#orderPaymentType").textContent = order.paymentType === "partial" ? `Partial payment of ${order.price || "—"}` : "Full payment";
       document.querySelector("#orderPrice").textContent = order.price || "—";
       summary.hidden = false;
       paymentButton.disabled = false;
@@ -79,7 +80,10 @@ if (!isFirebaseConfigured || !orderId) {
                 customerEmail: order.email || user.email,
                 customerName: order.customerName,
                 phone: order.phone,
-                physicalAddress: order.physicalAddress
+                physicalAddress: order.physicalAddress,
+                paymentType: order.paymentType,
+                fullPrice: order.fullPrice,
+                minimumPayment: order.minimumPayment
               }
             })
           });

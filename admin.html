@@ -52,6 +52,10 @@
           <div><label for="price">Price</label><input id="price" required placeholder="$4,950"></div>
           <div><label for="note">Availability note</label><input id="note" required placeholder="Limited units"></div>
         </div>
+        <div class="form-row">
+          <div><label for="paymentType">Payment type</label><select id="paymentType"><option value="full">Full payment</option><option value="partial">Partial payment</option></select></div>
+          <div><label for="minimumPayment">Minimum partial amount</label><input id="minimumPayment" placeholder="$500"></div>
+        </div>
         <label class="checkbox"><input id="active" type="checkbox" checked> Visible on storefront</label>
         <button class="primary" type="submit">Save product</button>
       </form>

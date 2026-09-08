@@ -141,11 +141,21 @@
     <div class="eyebrow">ORDER REQUEST</div>
     <h2 id="modalTitle">Reserve hardware</h2>
     <p id="modalPrice"></p>
+    <p id="paymentTypeLabel" class="payment-type-label"></p>
     <form id="orderForm">
       <input required name="name" placeholder="Full name">
       <input required type="email" name="email" placeholder="Email address">
       <input name="phone" placeholder="Phone number">
       <textarea required name="physicalAddress" placeholder="Example: 123 Main Street, Los Angeles, CA 90001" rows="3"></textarea>
+      <label>Payment option</label>
+      <div class="payment-options">
+        <label class="payment-option"><input type="checkbox" id="fullPayment"> Pay in full</label>
+        <label class="payment-option"><input type="checkbox" id="partialPayment"> Pay a partial amount</label>
+      </div>
+      <div id="partialAmountField" hidden>
+        <label for="paymentAmount">Amount to pay now</label>
+        <input required name="paymentAmount" id="paymentAmount" type="number" min="1" step="0.01" placeholder="Enter amount">
+      </div>
       <button class="btn full" type="submit">Submit request</button>
     </form>
     <p class="fine">Your order details are saved securely before continuing to payment.</p>

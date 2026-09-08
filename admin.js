@@ -15,7 +15,7 @@ const productsRef = database ? ref(database, "products") : null;
 let products = {};
 
 const sampleProducts = {
-  antminerS19Pro: { name: "Antminer S19 Pro", type: "asic", tag: "ASIC", spec: "110 TH/s · ~29.5 J/TH", price: "$2,850", note: "Limited allocation", active: true },
+  antminerS19Pro: { name: "Antminer S19 Pro", type: "asic", tag: "ASIC", spec: "110 TH/s · ~29.5 J/TH", price: "$2,850", note: "Limited allocation", paymentType: "full", active: true },
   whatsminerM30S: { name: "WhatsMiner M30S++", type: "asic", tag: "ASIC", spec: "112 TH/s · ~31 J/TH", price: "$2,650", note: "Batch closing soon", active: true },
   antminerS21: { name: "Antminer S21", type: "asic", tag: "NEXT GEN", spec: "200 TH/s · ~17.5 J/TH", price: "$4,950", note: "New release", active: true },
   whatsminerM50S: { name: "WhatsMiner M50S", type: "asic", tag: "ASIC", spec: "126 TH/s · Industrial cooling", price: "$3,150", note: "Limited units", active: true },
@@ -88,6 +88,8 @@ function startEdit(id) {
   $("#spec").value = product.spec || "";
   $("#price").value = product.price || "";
   $("#note").value = product.note || "";
+  $("#paymentType").value = product.paymentType || "full";
+  $("#minimumPayment").value = product.minimumPayment || "";
   $("#active").checked = product.active !== false;
   $("#formTitle").textContent = "Edit product";
   $("#cancelEdit").hidden = false;
@@ -114,6 +116,8 @@ $("#productForm").onsubmit = async event => {
     spec: $("#spec").value.trim(),
     price: $("#price").value.trim(),
     note: $("#note").value.trim(),
+    paymentType: $("#paymentType").value,
+    minimumPayment: $("#minimumPayment").value.trim(),
     active: $("#active").checked
   };
   try {

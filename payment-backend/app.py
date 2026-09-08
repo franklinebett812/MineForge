@@ -80,6 +80,19 @@ def create_payment():
     required_fields = ("price", "productName", "customerEmail")
     if any(not isinstance(order.get(field), str) or not order[field].strip() for field in required_fields):
         return jsonify({"error": "Incomplete order details"}), 400
+    try:
+        payment_amount = Decimal(parse_price(order["price"]))
+        full_amount = Decimal(parse_price(order.get("fullPrice", order["price"])))
+        minimum_amount = Decimal(parse_price(order.get("minimumPayment") or "$1"))
+    except ValueError as error:
+        return jsonify({"error": str(error)}), 400
+    payment_type = order.get("paymentType", "full")
+    if payment_type not in ("full", "partial"):
+        return jsonify({"error": "Invalid payment type"}), 400
+    if payment_type == "full" and payment_amount != full_amount:
+        return jsonify({"error": "Full payment must match the listed price"}), 400
+    if payment_type == "partial" and (payment_amount < minimum_amount or payment_amount > full_amount):
+        return jsonify({"error": "Partial payment is outside the allowed range"}), 400
 
     try:
         invoice = create_nowpayments_invoice(order_id, order)
