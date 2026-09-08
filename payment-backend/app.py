@@ -4,15 +4,12 @@ import hmac
 import hashlib
 from decimal import Decimal, InvalidOperation
 from functools import wraps
-from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 import json
 
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-import firebase_admin
-from firebase_admin import auth, credentials, db
 
 load_dotenv()
 
@@ -20,40 +17,6 @@ app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": os.getenv("FRONTEND_ORIGIN", "*")}})
 
 NOWPAYMENTS_URL = "https://api.nowpayments.io/v1/invoice"
-
-
-def init_firebase():
-    if firebase_admin._apps:
-        return
-    service_account_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-    if service_account_path:
-        firebase_admin.initialize_app(
-            credentials.Certificate(service_account_path),
-            {"databaseURL": os.environ["FIREBASE_DATABASE_URL"]},
-        )
-        return
-    firebase_admin.initialize_app(options={"databaseURL": os.environ["FIREBASE_DATABASE_URL"]})
-
-
-try:
-    init_firebase()
-except (KeyError, ValueError, OSError) as error:
-    raise RuntimeError("Firebase backend configuration is incomplete") from error
-
-
-def require_firebase_user(handler):
-    @wraps(handler)
-    def wrapped(*args, **kwargs):
-        header = request.headers.get("Authorization", "")
-        if not header.startswith("Bearer "):
-            return jsonify({"error": "Firebase authorization required"}), 401
-        try:
-            user = auth.verify_id_token(header.removeprefix("Bearer ").strip())
-        except Exception:
-            return jsonify({"error": "Invalid Firebase authorization token"}), 401
-        return handler(user, *args, **kwargs)
-
-    return wrapped
 
 
 def parse_price(value):
@@ -105,26 +68,21 @@ def create_nowpayments_invoice(order_id, order):
 
 
 @app.post("/api/create-payment")
-@require_firebase_user
-def create_payment(user):
+def create_payment():
     body = request.get_json(silent=True) or {}
     order_id = body.get("orderId")
     if not isinstance(order_id, str) or not order_id or len(order_id) > 128:
         return jsonify({"error": "A valid order ID is required"}), 400
 
-    order = db.reference(f"orders/{order_id}").get()
-    if not order or order.get("uid") != user["uid"]:
-        return jsonify({"error": "Order not found"}), 404
-    if order.get("status") not in ("pending_payment", "payment_failed"):
-        return jsonify({"error": "This order is not available for payment"}), 409
+    order = body.get("order")
+    if not isinstance(order, dict):
+        return jsonify({"error": "Order details are required"}), 400
+    required_fields = ("price", "productName", "customerEmail")
+    if any(not isinstance(order.get(field), str) or not order[field].strip() for field in required_fields):
+        return jsonify({"error": "Incomplete order details"}), 400
 
     try:
         invoice = create_nowpayments_invoice(order_id, order)
-        db.reference(f"orders/{order_id}").update({
-            "status": "payment_pending",
-            "paymentInvoiceId": invoice.get("id"),
-            "paymentUrl": invoice.get("invoice_url"),
-        })
         return jsonify({"paymentUrl": invoice.get("invoice_url"), "invoiceId": invoice.get("id")})
     except (RuntimeError, ValueError) as error:
         return jsonify({"error": str(error)}), 502
@@ -148,12 +106,8 @@ def nowpayments_ipn():
     allowed_statuses = {"waiting", "confirming", "confirmed", "finished", "failed", "refunded", "expired"}
     if status not in allowed_statuses:
         status = "unknown"
-    db.reference(f"orders/{order_id}").update({
-        "paymentStatus": status,
-        "paymentUpdatedAt": {".sv": "timestamp"},
-        "paymentId": payload.get("payment_id"),
-    })
-    return jsonify({"ok": True})
+    app.logger.info("NOWPayments order %s status: %s (payment %s)", order_id, status, payload.get("payment_id"))
+    return jsonify({"ok": True, "orderId": order_id, "status": status})
 
 
 @app.get("/api/health")

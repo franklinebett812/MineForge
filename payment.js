@@ -68,11 +68,20 @@ if (!isFirebaseConfigured || !orderId) {
         paymentButton.disabled = true;
         paymentButton.textContent = "Creating secure payment...";
         try {
-          const idToken = await user.getIdToken();
           const response = await fetch(`${paymentBackendUrl}/api/create-payment`, {
             method: "POST",
-            headers: { "Authorization": `Bearer ${idToken}`, "Content-Type": "application/json" },
-            body: JSON.stringify({ orderId })
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              orderId,
+              order: {
+                productName: order.productName,
+                price: order.price,
+                customerEmail: order.email || user.email,
+                customerName: order.customerName,
+                phone: order.phone,
+                physicalAddress: order.physicalAddress
+              }
+            })
           });
           const result = await response.json();
           if (!response.ok || !result.paymentUrl) throw new Error(result.error || "Payment could not be created");
