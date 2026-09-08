@@ -18,7 +18,7 @@
       <a href="#delivery">Delivery</a>
       <a href="#faq">FAQ</a>
     </nav>
-    <a class="btn btn-small" id="loginLink" href="login.html?redirect=/index.html">Sign in</a>
+    <a class="btn btn-small" id="loginLink" href="login.html?redirect=/admin.html">Sign in</a>
     <div class="account-menu" id="accountMenu" hidden>
       <button class="account-trigger" id="accountTrigger" type="button" aria-expanded="false" aria-controls="accountDropdown">
         <span class="account-avatar" id="accountAvatar">?</span>
@@ -30,7 +30,8 @@
           <strong id="accountName">Account</strong>
           <span id="accountEmail"></span>
         </div>
-        <a href="#profile" id="profileLink">Profile</a>
+        <button type="button" id="profileLink">Profile</button>
+        <a href="admin.html">Admin dashboard</a>
         <a href="#orders">My orders</a>
         <button type="button" id="logoutButton">Sign out</button>
       </div>
@@ -88,6 +89,7 @@
         <button class="filter" data-filter="gpu">GPU</button>
       </div>
     </div>
+    <p class="catalog-status" id="catalogStatus" role="status" aria-live="polite">Loading live catalog...</p>
     <div class="product-grid" id="productGrid"></div>
   </div>
 </section>
@@ -145,7 +147,20 @@
       <input name="phone" placeholder="Phone number">
       <button class="btn full" type="submit">Submit request</button>
     </form>
-    <p class="fine">Demo form only — connect this to your own backend/payment provider before production use.</p>
+    <p class="fine">Your order details are saved securely before continuing to payment.</p>
+  </div>
+</div>
+
+<div class="modal" id="profileModal">
+  <div class="modal-box">
+    <button class="close" id="closeProfile" type="button">×</button>
+    <div class="eyebrow">YOUR ACCOUNT</div>
+    <h2>Profile</h2>
+    <div class="profile-details">
+      <span>Name</span><strong id="profileName">—</strong>
+      <span>Email</span><strong id="profileEmail">—</strong>
+      <span>Phone</span><strong id="profilePhone">—</strong>
+    </div>
   </div>
 </div>
 <script type="module" src="script.js"></script>

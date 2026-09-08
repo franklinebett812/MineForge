@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MineForge product administration">
+  <title>Admin — MineForge</title>
+  <link rel="stylesheet" href="admin.css">
+  <style>.data-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.admin-badge{background:#2f3b1e;color:#c6ff9e}@media(max-width:850px){.data-grid{grid-template-columns:1fr}}</style>
+</head>
+<body>
+  <header class="admin-header">
+    <a class="brand" href="index.html">MINE<span>FORGE</span></a>
+    <div class="admin-actions">
+      <span id="adminEmail"></span>
+      <a href="index.html">Storefront</a>
+      <button id="logoutButton" type="button">Sign out</button>
+    </div>
+  </header>
+
+  <main class="admin-layout">
+    <section class="page-heading">
+      <div>
+        <p class="eyebrow">ADMINISTRATION</p>
+        <h1>Product listings</h1>
+        <p class="muted">Manage the hardware shown on the storefront in real time.</p>
+      </div>
+      <button class="secondary" id="seedButton" type="button">Load sample catalog</button>
+    </section>
+
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+
+    <section class="admin-grid">
+      <form class="panel product-form" id="productForm">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">LISTING EDITOR</p>
+            <h2 id="formTitle">Add product</h2>
+          </div>
+          <button class="text-button" id="cancelEdit" type="button" hidden>Cancel</button>
+        </div>
+        <input id="productId" type="hidden">
+        <label for="name">Product name</label>
+        <input id="name" required placeholder="Antminer S21">
+        <div class="form-row">
+          <div><label for="type">Type</label><select id="type"><option value="asic">ASIC</option><option value="gpu">GPU</option></select></div>
+          <div><label for="tag">Tag</label><input id="tag" required placeholder="ASIC"></div>
+        </div>
+        <label for="spec">Specifications</label>
+        <input id="spec" required placeholder="200 TH/s · ~17.5 J/TH">
+        <div class="form-row">
+          <div><label for="price">Price</label><input id="price" required placeholder="$4,950"></div>
+          <div><label for="note">Availability note</label><input id="note" required placeholder="Limited units"></div>
+        </div>
+        <label class="checkbox"><input id="active" type="checkbox" checked> Visible on storefront</label>
+        <button class="primary" type="submit">Save product</button>
+      </form>
+
+      <section class="panel listings-panel">
+        <div class="panel-heading">
+          <div><p class="eyebrow">REALTIME DATABASE</p><h2>Current listings</h2></div>
+          <span class="count" id="productCount">0 products</span>
+        </div>
+        <div class="listing-table-wrap">
+          <table>
+            <thead><tr><th>Product</th><th>Type</th><th>Price</th><th>Status</th><th></th></tr></thead>
+            <tbody id="productRows"><tr><td colspan="5" class="empty">Loading listings...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <section class="data-grid">
+      <section class="panel">
+        <div class="panel-heading"><div><p class="eyebrow">CUSTOMER ACTIVITY</p><h2>Orders</h2></div><span class="count" id="orderCount">0 orders</span></div>
+        <div class="listing-table-wrap">
+          <table>
+            <thead><tr><th>Customer</th><th>Product</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+            <tbody id="orderRows"><tr><td colspan="5" class="empty">Loading orders...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading"><div><p class="eyebrow">AUTHENTICATION</p><h2>Users</h2></div><span class="count" id="userCount">0 users</span></div>
+        <div class="listing-table-wrap">
+          <table>
+            <thead><tr><th>User</th><th>Phone</th><th>Role</th><th>Last seen</th></tr></thead>
+            <tbody id="userRows"><tr><td colspan="4" class="empty">Loading users...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div class="access-denied" id="accessDenied" hidden>
+    <div class="denied-card">
+      <p class="eyebrow">ACCESS RESTRICTED</p>
+      <h1>Admin access required</h1>
+      <p class="muted">This account is signed in but does not have the administrator claim.</p>
+      <a class="primary link-button" href="index.html">Return to storefront</a>
+    </div>
+  </div>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

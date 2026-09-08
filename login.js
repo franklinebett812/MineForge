@@ -13,6 +13,7 @@ import {
 	signInWithPopup,
 	onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDatabase, ref, serverTimestamp, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import { firebaseConfig, isFirebaseConfigured } from "./firebase-config.js";
 
 const $ = selector => document.querySelector(selector);
@@ -24,7 +25,7 @@ let signUpMode = false;
 const requestedRedirect = new URLSearchParams(window.location.search).get("redirect");
 const redirectTarget = requestedRedirect && requestedRedirect.startsWith("/") && !requestedRedirect.startsWith("//")
 	? requestedRedirect
-	: "index.html";
+	: "admin.html";
 
 function showStatus(message, type = "") {
 	status.textContent = message;
@@ -47,7 +48,21 @@ function firebaseError(error) {
 	return messages[error.code] || "Authentication failed. Check your details and try again.";
 }
 
-function redirectAfterSignIn(user) {
+async function syncUserProfile(database, user) {
+	await update(ref(database, `users/${user.uid}`), {
+		email: user.email || null,
+		phoneNumber: user.phoneNumber || null,
+		displayName: user.displayName || null,
+		lastLoginAt: serverTimestamp()
+	});
+}
+
+async function redirectAfterSignIn(database, user) {
+	try {
+		await syncUserProfile(database, user);
+	} catch (error) {
+		console.warn("Unable to sync user profile", error);
+	}
 	showStatus(`Signed in as ${user.email || user.phoneNumber}.`, "success");
 	setTimeout(() => { window.location.replace(redirectTarget); }, 700);
 }
@@ -55,6 +70,7 @@ function redirectAfterSignIn(user) {
 if (isFirebaseConfigured) {
 	const app = initializeApp(firebaseConfig);
 	const auth = getAuth(app);
+	const database = getDatabase(app);
 	onAuthStateChanged(auth, user => {
 		if (user) window.location.replace(redirectTarget);
 	});
@@ -69,7 +85,7 @@ if (isFirebaseConfigured) {
 			const credential = signUpMode
 				? await createUserWithEmailAndPassword(auth, email, password)
 				: await signInWithEmailAndPassword(auth, email, password);
-			redirectAfterSignIn(credential.user);
+			redirectAfterSignIn(database, credential.user);
 		} catch (error) {
 			showStatus(firebaseError(error), "error");
 		}
@@ -78,7 +94,7 @@ if (isFirebaseConfigured) {
 	$("#googleBtn").addEventListener("click", async () => {
 		try {
 			const credential = await signInWithPopup(auth, new GoogleAuthProvider());
-			redirectAfterSignIn(credential.user);
+			redirectAfterSignIn(database, credential.user);
 		} catch (error) {
 			showStatus(firebaseError(error), "error");
 		}
@@ -139,7 +155,7 @@ if (isFirebaseConfigured) {
 		if (!confirmationResult) return;
 		try {
 			const credential = await confirmationResult.confirm($("#verificationCode").value.trim());
-			redirectAfterSignIn(credential.user);
+			redirectAfterSignIn(database, credential.user);
 		} catch (error) {
 			showStatus(firebaseError(error), "error");
 		}

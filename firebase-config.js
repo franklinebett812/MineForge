@@ -7,6 +7,7 @@ export const firebaseConfig = {
   storageBucket: "mineforge-563c9.firebasestorage.app",
   messagingSenderId: "549655456072",
   appId: "1:549655456072:web:3dd1d55e4f6644b56f2b7d",
-  measurementId: "G-LRE1EK3EDT"
+  measurementId: "G-LRE1EK3EDT",
+  databaseURL: "https://mineforge-563c9-default-rtdb.firebaseio.com"
 };
 export const isFirebaseConfigured = !Object.values(firebaseConfig).some(value => value.includes("YOUR_"));

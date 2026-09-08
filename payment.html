@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MineForge order payment">
+  <title>Payment — MineForge</title>
+  <link rel="stylesheet" href="payment.css">
+</head>
+<body>
+  <main class="payment-wrap">
+    <section class="payment-card">
+      <a class="brand" href="index.html">MINE<span>FORGE</span></a>
+      <p class="eyebrow">ORDER CHECKOUT</p>
+      <h1>Review your order</h1>
+      <p class="muted" id="paymentStatus">Loading your order...</p>
+      <div class="order-summary" id="orderSummary" hidden>
+        <div><span>Product</span><strong id="orderProduct"></strong></div>
+        <div><span>Specifications</span><strong id="orderSpec"></strong></div>
+        <div><span>Customer</span><strong id="orderCustomer"></strong></div>
+        <div class="total"><span>Total</span><strong id="orderPrice"></strong></div>
+      </div>
+      <button class="primary" id="paymentButton" type="button" disabled>Continue to secure payment</button>
+      <a class="back-link" href="index.html#products">Return to products</a>
+      <p class="fine">Payment processing is not connected yet. Connect a legitimate payment provider before accepting funds.</p>
+    </section>
+  </main>
+  <script type="module" src="payment.js"></script>
+</body>
+</html>
