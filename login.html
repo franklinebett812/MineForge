@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MineForge secure account login">
+  <title>Login — MineForge</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <div class="backdrop"></div>
+  <header class="login-nav">
+    <a class="brand" href="index.html">MINE<span>FORGE</span></a>
+    <a href="index.html" class="back">← Store</a>
+  </header>
+
+  <main class="login-wrap">
+    <section class="login-card">
+      <div class="coin" aria-hidden="true">
+        <div class="btc">₿</div>
+      </div>
+      <div class="eyebrow">SECURE ACCOUNT</div>
+      <h1>Welcome back</h1>
+      <p class="sub">Sign in to manage your hardware orders and account.</p>
+
+      <button class="google" id="googleBtn">
+        <span class="google-icon">G</span>
+        Continue with Google
+      </button>
+
+      <div class="divider"><span>or continue with email</span></div>
+
+      <form id="emailForm">
+        <label>Email address</label>
+        <input type="email" id="email" autocomplete="email" placeholder="you@example.com" required>
+
+        <label>Password</label>
+        <div class="password">
+          <input type="password" id="password" autocomplete="current-password" placeholder="Enter your password" required>
+          <button type="button" id="togglePassword">Show</button>
+        </div>
+
+        <div class="row">
+          <label class="remember"><input type="checkbox" id="remember"> Remember me</label>
+          <a href="#" id="forgot">Forgot password?</a>
+        </div>
+
+        <button class="primary" type="submit">Sign in</button>
+      </form>
+
+      <div class="divider"><span>or</span></div>
+
+      <form id="phoneForm">
+        <label>Phone number</label>
+        <div class="phone-row">
+          <select id="countryCode" aria-label="Country code">
+            <option value="+1">+1</option>
+            <option value="+254">+254</option>
+            <option value="+44">+44</option>
+            <option value="+49">+49</option>
+            <option value="+61">+61</option>
+          </select>
+          <input type="tel" id="phone" placeholder="Phone number" autocomplete="tel">
+        </div>
+        <button class="secondary" type="submit">Continue with phone</button>
+      </form>
+
+      <p class="signup">Don't have an account? <a href="#" id="signup">Create one</a></p>
+      <p class="fine">Demo authentication UI. Connect Firebase Authentication before using real accounts.</p>
+    </section>
+  </main>
+
+  <script src="login.js"></script>
+</body>
+</html>
