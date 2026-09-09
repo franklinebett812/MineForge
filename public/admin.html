@@ -6,7 +6,7 @@
   <meta name="description" content="MineForge product administration">
   <title>Admin — MineForge</title>
   <link rel="stylesheet" href="admin.css">
-  <style>.data-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.admin-badge{background:#2f3b1e;color:#c6ff9e}@media(max-width:850px){.data-grid{grid-template-columns:1fr}}</style>
+  <style>.data-grid{display:grid;grid-template-columns:repeat(3,minmax(280px,1fr));gap:18px;margin-top:18px}.admin-badge{background:#2f3b1e;color:#c6ff9e}@media(max-width:850px){.data-grid{grid-template-columns:1fr}}</style>
 </head>
 <body>
   <header class="admin-header">
@@ -91,6 +91,16 @@
           <table>
             <thead><tr><th>User</th><th>Phone</th><th>Role</th><th>Last seen</th></tr></thead>
             <tbody id="userRows"><tr><td colspan="4" class="empty">Loading users...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading"><div><p class="eyebrow">CONTACT REQUESTS</p><h2>Messages</h2></div><span class="count" id="contactCount">0 messages</span></div>
+        <div class="listing-table-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Reason</th><th>Message</th><th>Date</th></tr></thead>
+            <tbody id="contactRows"><tr><td colspan="6" class="empty">Loading messages...</td></tr></tbody>
           </table>
         </div>
       </section>

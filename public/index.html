@@ -16,6 +16,7 @@
       <a href="#products">Products</a>
       <a href="#comparison">Compare</a>
       <a href="#delivery">Delivery</a>
+      <a href="#contact">Contact</a>
       <a href="#faq">FAQ</a>
     </nav>
     <a class="btn btn-small" id="loginLink" href="login.html?redirect=/admin.html">Sign in</a>
@@ -113,13 +114,146 @@
 </section>
 
 <section class="section" id="delivery">
-  <div class="container info-grid">
-    <div><div class="eyebrow">DELIVERY & SUPPORT</div><h2>Built around a clear handoff.</h2><p class="lead">Typical preparation and shipping windows vary by inventory. Tracking is supplied when an order is dispatched.</p></div>
-    <div class="info-list">
-      <div><span>01</span><div><h3>Tracked shipping</h3><p>Receive tracking details after dispatch.</p></div></div>
-      <div><span>02</span><div><h3>Hardware support</h3><p>Documentation and setup guidance are available.</p></div></div>
-      <div><span>03</span><div><h3>Warranty policy</h3><p>Coverage depends on the specific unit and order terms.</p></div></div>
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">DELIVERY &amp; SUPPORT</div>
+        <h2>Delivery &amp; Warranty</h2>
+      </div>
     </div>
+
+    <div class="delivery-card-grid">
+      <article class="delivery-card">
+        <span class="delivery-card-index">01</span>
+        <div class="delivery-card-content">
+          <h3>Delivery</h3>
+          <ul class="delivery-list">
+            <li>Ships within 3-7 days of order confirmation.</li>
+            <li>Tracked worldwide shipping included.</li>
+            <li>Ready to mine upon arrival.</li>
+            <li>Invoices are issued at checkout.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="delivery-card">
+        <span class="delivery-card-index">02</span>
+        <div class="delivery-card-content">
+          <h3>Warranty</h3>
+          <ul class="delivery-list">
+            <li>90 days parts replacement warranty.</li>
+            <li>24/7 customer support via email.</li>
+            <li>Refund request within 30 days for defective or misdescribed rigs.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="delivery-card">
+        <span class="delivery-card-index">03</span>
+        <div class="delivery-card-content">
+          <h3>Ordering Notes</h3>
+          <ul class="delivery-list">
+            <li>Bitcoin on-chain payments accepted.</li>
+            <li>Private allocation for serious buyers only.</li>
+            <li>Keep your order confirmation email for reference.</li>
+            <li>No resellers allowed.</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section reviews-section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">BUYER FIELD NOTES</div>
+        <h2>Signal from the mining floor.</h2>
+      </div>
+    </div>
+
+    <div class="reviews-grid">
+      <article class="review-card">
+        <p class="quote">“I hesitated and watched prices climb twice. Finally ordered — and the rig arrived mining out of the box.”</p>
+        <span class="review-author">— Daniel K.</span>
+      </article>
+      <article class="review-card">
+        <p class="quote">“Not retail junk. These are real farm machines.”</p>
+        <span class="review-author">— Ahmed R.</span>
+      </article>
+      <article class="review-card">
+        <p class="quote">“Smooth process, fast shipping, and the rig performs as promised.”</p>
+        <span class="review-author">— Sarah L.</span>
+      </article>
+      <article class="review-card">
+        <p class="quote">“Bought 3 rigs for my home setup. Hashrate is rock solid.”</p>
+        <span class="review-author">— Tom W.</span>
+      </article>
+      <article class="review-card">
+        <p class="quote">“Excellent communication and support throughout.”</p>
+        <span class="review-author">— Maria S.</span>
+      </article>
+      <article class="review-card">
+        <p class="quote">“The rig arrived faster than expected and was ready to mine.”</p>
+        <span class="review-author">— John D.</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section contact-section" id="contact">
+  <div class="container contact-grid">
+    <div class="contact-copy">
+      <div class="eyebrow">CONTACT US</div>
+      <h2>Talk with the MineForge team.</h2>
+      <div class="contact-meta">
+        <div class="contact-row">
+          <span class="contact-label">Phone</span>
+          <a class="contact-link" href="tel:+18005550137">+1 (800) 555-0137</a>
+        </div>
+        <div class="contact-row">
+          <span class="contact-label">Email</span>
+          <a class="contact-link" href="mailto:support@mineforge.com">support@mineforge.com</a>
+        </div>
+      </div>
+    </div>
+
+    <aside class="contact-panel">
+      <div class="contact-panel-inner">
+        <form class="contact-form" id="contactForm">
+          <div class="contact-form-row">
+            <label for="contactName">Full name</label>
+            <input id="contactName" name="name" type="text" required placeholder="Full name">
+          </div>
+          <div class="contact-form-row">
+            <label for="contactEmail">Email address</label>
+            <input id="contactEmail" name="email" type="email" required placeholder="Email address">
+          </div>
+          <div class="contact-form-row">
+            <label for="contactPhone">Phone number</label>
+            <input id="contactPhone" name="phone" type="tel" required placeholder="Phone number">
+          </div>
+          <div class="contact-form-row">
+            <label for="contactReason">Reason for reaching out</label>
+            <select id="contactReason" name="reason" required>
+              <option value="">Select a reason</option>
+              <option>Order and hardware allocation</option>
+              <option>Shipping and delivery</option>
+              <option>Warranty and replacement</option>
+              <option>Payment and invoice</option>
+              <option>Mining rig setup and support</option>
+            </select>
+          </div>
+          <div class="contact-form-row">
+            <label for="contactMessage">Message</label>
+            <textarea id="contactMessage" name="message" required rows="4" placeholder="Tell us how we can help"></textarea>
+          </div>
+          <button class="btn full" type="submit">Send request</button>
+          <p class="contact-status" id="contactStatus" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </aside>
   </div>
 </section>
 
@@ -133,7 +267,7 @@
 </section>
 </main>
 
-<footer><div class="container footer"><div class="brand">MINE<span>FORGE</span></div><p>© 2026 MineForge. Demo storefront template.</p><div><a href="#products">Products</a> · <a href="#faq">FAQ</a></div></div></footer>
+<footer><div class="container footer"><div class="brand">MINE<span>FORGE</span></div><p>© 2026 MineForge</p><div><a href="#products">Products</a> · <a href="#faq">FAQ</a></div></div></footer>
 
 <div class="modal" id="orderModal">
   <div class="modal-box">
@@ -175,5 +309,18 @@
   </div>
 </div>
 <script type="module" src="script.js"></script>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/6aa113b6969ff734474d930c/default';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
 </body>
 </html>

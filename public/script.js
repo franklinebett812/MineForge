@@ -129,6 +129,45 @@ document.querySelectorAll(".filter").forEach(btn=>btn.onclick=()=>{
  btn.classList.add("active"); render(btn.dataset.filter);
 });
 
+const contactForm=document.querySelector("#contactForm");
+const contactStatus=document.querySelector("#contactStatus");
+if(contactForm){
+ contactForm.onsubmit=async event=>{
+  event.preventDefault();
+  if(!contactForm.checkValidity()){
+   contactForm.reportValidity();
+   return;
+  }
+  if(!database || !isFirebaseConfigured){
+   contactStatus.textContent="Firebase is not configured. Please contact support by email.";
+   contactStatus.classList.add("error");
+   return;
+  }
+
+  const formData=new FormData(contactForm);
+  const contactRef=push(ref(database,"contactMessages"));
+  const payload={
+   name:String(formData.get("name")).trim(),
+   email:String(formData.get("email")).trim(),
+   phone:String(formData.get("phone")).trim(),
+   reason:String(formData.get("reason")).trim(),
+   message:String(formData.get("message")).trim(),
+   createdAt:serverTimestamp()
+  };
+
+  try{
+   await set(contactRef,payload);
+   contactStatus.textContent="Thank you. Our team will reach out shortly.";
+   contactStatus.classList.remove("error");
+   contactForm.reset();
+  }catch(error){
+   console.error("Unable to save contact request",error);
+   contactStatus.textContent="The request could not be sent. Please try again or email support.";
+   contactStatus.classList.add("error");
+  }
+ };
+}
+
 const modal=document.querySelector("#orderModal");
 let selectedProduct=null;
 function openModal(p){

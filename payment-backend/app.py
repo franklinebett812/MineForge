@@ -14,7 +14,7 @@ from flask_cors import CORS
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": os.getenv("FRONTEND_ORIGIN", "*")}})
+CORS(app, resources={r"/api/*": {"origins": [origin.strip() for origin in os.getenv("FRONTEND_ORIGIN", "*").split(",") if origin.strip()]}})
 
 NOWPAYMENTS_URL = "https://api.nowpayments.io/v1/invoice"
 

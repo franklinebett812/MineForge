@@ -8,6 +8,7 @@ const status = $("#status");
 const rows = $("#productRows");
 const orderRows = $("#orderRows");
 const userRows = $("#userRows");
+const contactRows = $("#contactRows");
 const app = isFirebaseConfigured ? initializeApp(firebaseConfig) : null;
 const auth = app ? getAuth(app) : null;
 const database = app ? getDatabase(app) : null;
@@ -68,6 +69,20 @@ function renderUsers(users) {
   $("#userCount").textContent = `${entries.length} user${entries.length === 1 ? "" : "s"}`;
   userRows.innerHTML = entries.length ? entries.map(user => `
     <tr><td><strong>${escapeHtml(user.displayName || "Unnamed user")}</strong><small>${escapeHtml(user.email || "—")}</small></td><td>${escapeHtml(user.phoneNumber || "—")}</td><td><span class="badge ${user.role === "admin" ? "admin-badge" : ""}">${escapeHtml(user.role || "user")}</span></td><td>${formatDate(user.lastLoginAt)}</td></tr>`).join("") : '<tr><td colspan="4" class="empty">No user profiles found.</td></tr>';
+}
+
+function renderContactMessages(messages) {
+  const entries = Object.values(messages || {}).sort((left, right) => (right.createdAt || 0) - (left.createdAt || 0));
+  $("#contactCount").textContent = `${entries.length} message${entries.length === 1 ? "" : "s"}`;
+  contactRows.innerHTML = entries.length ? entries.map(message => `
+    <tr>
+      <td><strong>${escapeHtml(message.name || "Unknown")}</strong></td>
+      <td>${escapeHtml(message.email || "—")}</td>
+      <td>${escapeHtml(message.phone || "—")}</td>
+      <td>${escapeHtml(message.reason || "—")}</td>
+      <td>${escapeHtml(message.message || "—")}</td>
+      <td>${formatDate(message.createdAt)}</td>
+    </tr>`).join("") : `<tr><td colspan="6" class="empty">No contact messages yet.</td></tr>`;
 }
 
 function resetForm() {
@@ -162,6 +177,7 @@ if (!isFirebaseConfigured) {
       }, () => showStatus("Could not read products. Check your database rules.", "error"));
       onValue(ref(database, "orders"), snapshot => renderOrders(snapshot.val()), () => showStatus("Could not read orders. Check your database rules.", "error"));
       onValue(ref(database, "users"), snapshot => renderUsers(snapshot.val()), () => showStatus("Could not read users. Check your database rules.", "error"));
+      onValue(ref(database, "contactMessages"), snapshot => renderContactMessages(snapshot.val()), () => showStatus("Could not read contact messages. Check your database rules.", "error"));
     } catch (error) {
       showStatus("Could not verify your administrator role.", "error");
     }
